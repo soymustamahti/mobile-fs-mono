@@ -26,12 +26,19 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - uses: expo/expo-github-action@v5
         with:
-          expo-version: 3.x
+          expo-version: 6.x
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
           expo-cache: true
-      - run: yarn
-      - run: |
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Change to Expo directory
+        run: cd apps/native
+
+      - name: Publish
+        run: |
           if [ ${{ github.ref }} = 'refs/heads/main' ]; then
             expo publish --release-channel main
           elif [ ${{ github.ref }} = 'refs/heads/staging' ]; then
