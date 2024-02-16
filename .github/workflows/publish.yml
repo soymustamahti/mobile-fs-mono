@@ -34,15 +34,12 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Change to Expo directory
-        run: cd apps/native
-
       - name: Publish
         run: |
           if [ ${{ github.ref }} = 'refs/heads/main' ]; then
-            expo publish --release-channel main
+            expo publish apps/native --release-channel main
           elif [ ${{ github.ref }} = 'refs/heads/staging' ]; then
-            expo publish --release-channel staging
+            expo publish apps/native --release-channel staging
           elif [ ${{ github.ref }} = 'refs/heads/develop' ]; then
-            expo publish --release-channel develop
+            expo publish apps/native --release-channel develop
           fi
