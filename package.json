@@ -1,0 +1,19 @@
+{
+  "name": "mobile-fs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/start"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "workspaces": [
+    "apps/*"
+  ],
+  "devDependencies": {
+    "inquirer": "^8.0.0"
+  }
+}
