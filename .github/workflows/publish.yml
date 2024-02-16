@@ -35,7 +35,7 @@ jobs:
         run: yarn
 
       - name: Install expo-updates
-        run: yarn add expo-updates
+        run: yarn add expo-updates --workspace apps/native
 
       - name: Publish
         run: |
