@@ -32,6 +32,8 @@
       }
     },
     "updates": {
+      "fallbackToCacheTimeout": 0,
+      "useClassicUpdates": true
     }
   }
 }
