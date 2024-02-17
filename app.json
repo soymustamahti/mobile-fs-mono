@@ -1,3 +1,11 @@
 {
-  "expo": {}
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "27ec648f-53ed-44dc-bf7a-ef492e8f5b5a"
+      }
+    },
+    "owner": "soymusta",
+    "slug": "mobile-fs-mobile"
+  }
 }

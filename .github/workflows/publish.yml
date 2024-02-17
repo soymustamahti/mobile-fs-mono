@@ -51,7 +51,14 @@ jobs:
         run: cd apps/native
 
       - name: Publish to Expo Go
-        run: expo publish --non-interactive --release-channel pr-${{ github.event.number }}
+        run: |
+          if [ ${{ github.ref }} = 'refs/heads/main' ]; then
+            expo publish apps/native --non-interactive --release-channel main
+          elif [ ${{ github.ref }} = 'refs/heads/staging' ]; then
+            expo publish apps/native --non-interactive --release-channel staging
+          elif [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+            expo publish apps/native --non-interactive --release-channel develop
+          fi
 
       - name: Add Expo Link to PR
         uses: mshick/add-pr-comment@v1
