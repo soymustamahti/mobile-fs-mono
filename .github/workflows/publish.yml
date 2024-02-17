@@ -1,5 +1,19 @@
-name: update
-on: push
+name: main
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - staging
+      - develop
+
+env:
+  NODE_VERSION: '20.x'
 
 jobs:
   update:
@@ -19,7 +33,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: ${{ env.NODE_VERSION }}
           cache: yarn
 
       - name: Setup EAS
@@ -31,10 +45,20 @@ jobs:
           expo-cache: true
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn
 
       - name: Go to the directory
         run: cd apps/native
 
-      - name: Publish update
-        run: eas update --auto
+      - name: Publish to Expo Go
+        run: expo publish --non-interactive --release-channel pr-${{ github.event.number }}
+
+      - name: Add Expo Link to PR
+        uses: mshick/add-pr-comment@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: |
+            ## Test this PR with Expo Go
+            ![Expo QR](https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=exp://exp.host/@soymusta/mobile-fs-mono?release-channel=pr-${{ github.event.number }})
+            **------ Build published to [Expo](https://exp.host/@andreaslydemann/todo-app?release-channel=pr-${{ github.event.number }}) ------**
