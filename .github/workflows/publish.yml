@@ -47,18 +47,17 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Go to the directory
-        run: cd apps/native
-
       - name: Publish to Expo Go
         run: |
-          if [ ${{ github.ref }} = 'refs/heads/main' ]; then
-            expo publish apps/native --non-interactive --release-channel main
-          elif [ ${{ github.ref }} = 'refs/heads/staging' ]; then
-            expo publish apps/native --non-interactive --release-channel staging
-          elif [ ${{ github.ref }} = 'refs/heads/develop' ]; then
-            expo publish apps/native --non-interactive --release-channel develop
-          fi
+          cd apps/native
+          eas update --auto --non-interactive --release-channel ${{ github.ref }}
+      #          if [ ${{ github.ref }} = 'refs/heads/main' ]; then
+      #            expo publish apps/native --non-interactive --release-channel main
+      #          elif [ ${{ github.ref }} = 'refs/heads/staging' ]; then
+      #            expo publish apps/native --non-interactive --release-channel staging
+      #          elif [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+      #            eas update apps/native --non-interactive --release-channel develop
+      #          fi
 
       - name: Add Expo Link to PR
         uses: mshick/add-pr-comment@v1
