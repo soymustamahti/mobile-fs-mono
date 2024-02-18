@@ -40,4 +40,4 @@ jobs:
         with:
           context: ./apps/back
           push: true
-          tags: soymustael/mobile-fs-mono:${{ github.ref }}
+          tags: soymustael/mobile-fs-mono:${GITHUB_REF##*/}
