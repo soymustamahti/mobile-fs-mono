@@ -50,7 +50,7 @@ jobs:
       - name: Publish to Expo Go
         run: |
           cd apps/native
-          eas update --auto --non-interactive --release-channel ${{ github.ref }}
+          eas update --auto --non-interactive
       #          if [ ${{ github.ref }} = 'refs/heads/main' ]; then
       #            expo publish apps/native --non-interactive --release-channel main
       #          elif [ ${{ github.ref }} = 'refs/heads/staging' ]; then
