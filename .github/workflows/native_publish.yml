@@ -17,7 +17,7 @@ env:
 
 jobs:
   update:
-    name: EAS Update
+    name: EAS Update - Publish to Expo Go
     runs-on: ubuntu-latest
     steps:
       - name: Check for EXPO_TOKEN
@@ -51,13 +51,6 @@ jobs:
         run: |
           cd apps/native
           eas update --auto --non-interactive
-      #          if [ ${{ github.ref }} = 'refs/heads/main' ]; then
-      #            expo publish apps/native --non-interactive --release-channel main
-      #          elif [ ${{ github.ref }} = 'refs/heads/staging' ]; then
-      #            expo publish apps/native --non-interactive --release-channel staging
-      #          elif [ ${{ github.ref }} = 'refs/heads/develop' ]; then
-      #            eas update apps/native --non-interactive --release-channel develop
-      #          fi
 
       - name: Add Expo Link to PR
         uses: mshick/add-pr-comment@v1
@@ -68,3 +61,30 @@ jobs:
             ## Test this PR with Expo Go
             ![Expo QR](https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=exp://exp.host/@soymusta/mobile-fs-mono?release-channel=pr-${{ github.event.number }})
             **------ Build published to [Expo](https://exp.host/@andreaslydemann/todo-app?release-channel=pr-${{ github.event.number }}) ------**
+
+  docker-publish-back:
+    name: Docker Publish - Back
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/back
+          push: true
+          tags: soymustael/mobile-fs-mono:${{ github.ref_name }}
