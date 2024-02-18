@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
+          cache: npm
 
       - name: Setup EAS
         uses: expo/expo-github-action@v8
@@ -45,7 +45,7 @@ jobs:
           expo-cache: true
 
       - name: Install dependencies
-        run: yarn
+        run: npm install
 
       - name: Publish to Expo Go
         run: |
