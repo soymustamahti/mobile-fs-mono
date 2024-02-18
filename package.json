@@ -5,7 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "node scripts/start"
+    "start": "node scripts/start",
+    "docker:back:up": "docker build -t mobile-fs-back ./apps/back"
   },
   "author": "",
   "license": "ISC",
