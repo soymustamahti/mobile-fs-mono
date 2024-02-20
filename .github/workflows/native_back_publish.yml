@@ -88,18 +88,18 @@ jobs:
         run: sudo apt-get install -y openssh-client
 
       - name: Set port based on branch
-          run: |
-            if [ "${{ github.ref_name }}" = "main" ]; then
-              PORT=3333
-            elif [ "${{ github.ref_name }}" = "develop" ]; then
-              PORT=4444
-            elif [ "${{ github.ref_name }}" = "staging" ]; then
-              PORT=5555
-            else
-              echo "Unsupported branch: ${{ github.ref_name }}"
-              exit 1
-            fi
-            echo "export PORT=$PORT" >> $GITHUB_ENV
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            PORT=3333
+          elif [ "${{ github.ref_name }}" = "develop" ]; then
+            PORT=4444
+          elif [ "${{ github.ref_name }}" = "staging" ]; then
+            PORT=5555
+          else
+            echo "Unsupported branch: ${{ github.ref_name }}"
+            exit 1
+          fi
+          echo "export PORT=$PORT" >> $GITHUB_ENV
 
       - name: SSH into Droplet, pull image, and run container
         uses: appleboy/ssh-action@master
