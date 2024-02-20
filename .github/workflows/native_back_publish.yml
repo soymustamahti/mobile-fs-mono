@@ -113,6 +113,9 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           port: ${{ secrets.DROPLET_SSH_PORT }}
           script: |
+            echo "Pulling and running the image on the server"
+            echo $PORT
+            echo $ENV_FILE
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull soymustael/mobile-fs-mono:${{ github.ref_name }}
             docker run -d --name server-${{ github.ref_name }} --network host -p $PORT:$PORT --env-file /root/$ENV_FILE soymustael/mobile-fs-mono:${{ github.ref_name }}
