@@ -115,6 +115,4 @@ jobs:
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull soymustael/mobile-fs-mono:${{ github.ref_name }}
-            docker stop server-${{ github.ref_name }} || true
-            docker rm server-${{ github.ref_name }} || true
             docker run -d --name server-${{ github.ref_name }} --network host -p $PORT:$PORT --env-file /root/$ENV_FILE soymustael/mobile-fs-mono:${{ github.ref_name }}
