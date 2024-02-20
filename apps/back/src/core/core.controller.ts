@@ -6,6 +6,8 @@ export class CoreController {
 
   @Get()
   async getHello(): Promise<string> {
-    return 'Hello World! From Core';
+    return (
+      'Hello World! From Core, Environment: ' + process.env.DROPLET_ENV + '!'
+    );
   }
 }
