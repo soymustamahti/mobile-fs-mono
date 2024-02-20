@@ -9,7 +9,7 @@ on:
 permissions:
   id-token: write
   contents: read
-  
+
 env:
   NODE_VERSION: '20.x'
 
@@ -90,13 +90,19 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run Azure CLI commands
-        run: |
-          az containerapp up \
-            --name mobile-fs-mono \
-            --resource-group devops-personal \
-            --location francecentral \
-            --environment ${{ github.ref_name }} \
-            --image soymustael/mobile-fs-mono:${{ github.ref_name }} \
-            --target-port 3000 \
-            --ingress external \
-            --query properties.configurations.ingress.fqdn \
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+#      - name: Run Azure CLI commands
+#        run: |
+#          az containerapp up \
+#            --name mobile-fs-mono \
+#            --resource-group devops-personal \
+#            --location francecentral \
+#            --environment ${{ github.ref_name }} \
+#            --image soymustael/mobile-fs-mono:${{ github.ref_name }} \
+#            --target-port 3000 \
+#            --ingress external \
+#            --query properties.configurations.ingress.fqdn \
