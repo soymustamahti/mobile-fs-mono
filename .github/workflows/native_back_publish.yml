@@ -87,24 +87,6 @@ jobs:
       - name: Install SSH client
         run: sudo apt-get install -y openssh-client
 
-      - name: Set port based on branch
-        run: |
-          if [ "${{ github.ref_name }}" = "main" ]; then
-            PORT=3333
-            ENV_FILE=.env
-          elif [ "${{ github.ref_name }}" = "develop" ]; then
-            PORT=4444
-            ENV_FILE=.env.develop
-          elif [ "${{ github.ref_name }}" = "staging" ]; then
-            PORT=5555
-            ENV_FILE=.env.staging
-          else
-            echo "Unsupported branch: ${{ github.ref_name }}"
-            exit 1
-          fi
-          echo "export PORT=$PORT" >> $GITHUB_ENV
-          echo "export ENV_FILE=$ENV_FILE" >> $GITHUB_ENV
-
       - name: SSH into Droplet, pull image, and run container
         uses: appleboy/ssh-action@master
         with:
@@ -114,5 +96,17 @@ jobs:
           port: ${{ secrets.DROPLET_SSH_PORT }}
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull soymustael/mobile-fs-mono:${{ github.ref_name }}
-            docker run -d --name server-${{ github.ref_name }} --network host -p $PORT:$PORT --env-file /root/$ENV_FILE soymustael/mobile-fs-mono:${{ github.ref_name }}
+            if [ "$(docker ps -q -f name=server-${{ github.ref_name }})" ]; then
+                docker stop server-${{ github.ref_name }}
+                docker rm server-${{ github.ref_name }}
+            fi
+            if [ "${{ github.ref_name }}" = "main" ]; then
+            docker run -d --name server-${{ github.ref_name }} --network host -p 3333:3333 --env-file /root/.env.${{ github.ref_name }} soymustael/mobile-fs-mono:${{ github.ref_name }}
+            elif [ "${{ github.ref_name }}" = "develop" ]; then
+            docker run -d --name server-${{ github.ref_name }} --network host -p 4444:4444 --env-file /root/.env.${{ github.ref_name }} soymustael/mobile-fs-mono:${{ github.ref_name }}
+            elif [ "${{ github.ref_name }}" = "staging" ]; then
+            docker run -d --name server-${{ github.ref_name }} --network host -p 5555:5555 --env-file /root/.env.${{ github.ref_name }} soymustael/mobile-fs-mono:${{ github.ref_name }}
+            else
+            echo "Unsupported branch: ${{ github.ref_name }}"
+            exit 1
+            fi
